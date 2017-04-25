@@ -1,0 +1,41 @@
+$header_height = 25px
+$header_img_width = 25px
+$header_padding_top = 5px
+$header_margin = 10px
+$header_background_color = #00ee00
+$font_color = #fff
+
+#fd_header
+  position relative
+  overflow auto
+  background $header_background_color
+  height $header_height
+  padding $header_padding_top 0
+  -moz-box-shadow 0 0 16px 0 #ccc
+  -webkit-box-shadow 0 0 16px 0 #ccc
+  box-shadow 0 0 16px 0 #ccc
+
+  .icon
+    font-size 2.5rem
+    color $font_color
+
+.goback,.gohome
+  position absolute
+  top $header_padding_top
+
+.goback
+  left $header_margin
+  border-right:1px solid #ccc
+
+.gohome
+  right $header_margin
+  border-left 1px solid #ccc
+  padding-left 7px
+.header_title
+  font-size 1.6rem
+  height 100%
+  line-height $header_height
+  width 100%
+  text-align center
+  color $font_color
+

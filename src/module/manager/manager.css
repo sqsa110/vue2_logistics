@@ -1,0 +1,34 @@
+/*
+body
+  background-color lighten($fd_background,90%)
+*/
+.middle {
+  float: left;
+  width: 100%;
+  background: #ffa500;
+  position: relative;
+  overflow: hidden;
+}
+.middle_main {
+  float: left;
+  width: 100%;
+  background: #008000;
+  position: relative;
+  left: 300px;
+}
+.fd_left,
+.fd_main {
+  min-height: 200px;
+  height: auto !important;
+  height: 200px;
+}
+.fd_left {
+  width: 300px;
+  float: left;
+  position: relative;
+  margin-left: -300px;
+}
+.fd_main {
+  position: relative;
+  margin-right: 300px;
+}

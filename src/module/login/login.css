@@ -1,0 +1,76 @@
+body {
+  background-color: #e4ffe4;
+}
+.login .login_main {
+  width: 80%;
+  margin: 80px auto 0;
+}
+.login .login_userinfo_main {
+  margin-top: 30px;
+}
+.login .login_title_main {
+  font-size: 0px;
+}
+.login .login_title_name {
+  display: inline-block;
+  background-color: #6ff76f;
+  width: 50%;
+  padding: 10px 0;
+  text-align: center;
+  font-size: 16px;
+  color: #fff;
+  text-decoration-line: none;
+  height: 2rem;
+  line-height: 2rem;
+}
+.login .login_title_name:first-of-type {
+  border-top-left-radius: 5px;
+  border-bottom-left-radius: 5px;
+}
+.login .login_title_name:last-of-type {
+  border-top-right-radius: 5px;
+  border-bottom-right-radius: 5px;
+}
+.login .active {
+  background-color: #0e0;
+  font-weight: 500;
+}
+.login input {
+  height: 3rem;
+}
+.login_box {
+  margin-bottom: 10px;
+}
+.login_box .login_input {
+  display: inline-block;
+  width: 100%;
+  position: relative;
+}
+.login_box .login_input input {
+  text-indent: 2rem;
+}
+.login_box .login_code_main {
+  vertical-align: middle;
+}
+.login_box .login_code_main:before {
+  content: '';
+}
+.login_box .login_code_img {
+  width: 100%;
+}
+.login_box .login_icon {
+  position: absolute;
+  font-size: 1.8rem;
+  top: 0.8rem;
+  left: 0.7rem;
+  color: #ff7400;
+}
+.login_btn {
+  margin-top: 25px;
+}
+.login_find {
+  float: right;
+}
+.login_find button {
+  text-decoration: underline;
+}

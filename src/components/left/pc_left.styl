@@ -1,0 +1,127 @@
+$fd_background = #fff
+$fd_color1 = #000
+$fd_color2 = #20a0ff
+$fd_nav_height = 50px
+
+
+@-webkit-keyframes rotate_right_down
+  from
+    -webkit-transform rotate(0)
+  to
+    -webkit-transform rotate(90deg)
+
+@-moz-keyframes rotate_right_down
+  from
+    -moz-transform rotate(0)
+  to
+    -moz-transform rotate(90deg)
+
+@-ms-keyframes rotate_right_down
+  from
+    -ms-transform rotate(0)
+  to
+    -ms-transform rotate(90deg)
+
+@-o-keyframes rotate_right_down
+  from
+    -o-transform rotate(0)
+  to
+    -o-transform rotate(90deg)
+
+@keyframes rotate_right_down
+  from
+    transform rotate(0)
+  to
+    transform rotate(90deg)
+
+@-webkit-keyframes rotate_down_right
+  from
+    -webkit-transform rotate(90deg)
+  to
+    -webkit-transform rotate(0)
+
+@-moz-keyframes rotate_down_right
+  from
+    -moz-transform rotate(90deg)
+  to
+    -moz-transform rotate(0)
+
+@-ms-keyframes rotate_down_right
+  from
+    -ms-transform rotate(90deg)
+  to
+    -ms-transform rotate(0)
+
+@-o-keyframes rotate_down_right
+  from
+    -o-transform rotate(90deg)
+  to
+    -o-transform rotate(0)
+
+@keyframes rotate_down_right
+  from
+    transform rotate(90deg)
+  to
+    transform rotate(0)
+
+.rotate_right_down
+  -webkit-transform rotate(90deg)
+  -moz-transform rotate(90deg)
+  -ms-transform rotate(90deg)
+  -o-transform rotate(90deg)
+  transform rotate(90deg)
+  -webkit-animation rotate_right_down 1s
+  -moz-animation rotate_right_down 1s
+  -ms-animation rotate_right_down 1s
+  -o-animation rotate_right_down 1s
+  animation rotate_right_down 1s
+
+.rotate_down_right
+  -webkit-transform rotate(0)
+  -moz-transform rotate(0)
+  -ms-transform rotate(0)
+  -o-transform rotate(0)
+  transform rotate(0)
+  -webkit-animation rotate_down_right 1s
+  -moz-animation rotate_down_right 1s
+  -ms-animation rotate_down_right 1s
+  -o-animation rotate_down_right 1s
+  animation rotate_down_right 1s
+
+.fd_left
+  background-color $fd_background
+  min-width 300px
+  color $fd_color1
+  ul
+    clear both
+    padding-left 20px
+  li
+    min-height $fd_nav_height
+    background-color #fff
+    font-size 0
+    overflow auto
+
+  .icon,h5
+    height $fd_nav_height
+    line-height $fd_nav_height
+    float left
+    font-size 16px
+    margin-left 5px
+
+  h5
+    text-indent 10px
+
+  a
+    color $fd_color1
+
+  .active
+    color $fd_color2
+
+  .icon
+    transform-origin 80% center
+
+.fade-enter-active,.fade-leave-active
+  transition opacity 5s ease-out
+
+.fade-enter,.fade-leave-to
+  opacity 0

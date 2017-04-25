@@ -1,0 +1,104 @@
+body,
+div,
+ul,
+ol,
+li,
+span,
+p,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+strong,
+em,
+input,
+textarea,
+button,
+select,
+option,
+label,
+form,
+a,
+b,
+footer,
+header,
+i,
+svg,
+use,
+dd,
+dt,
+dl,
+table,
+tr,
+td,
+thead,
+tbody,
+tfoot,
+th {
+  margin: 0;
+  padding: 0;
+}
+html,
+body {
+  font-size: 10px;
+}
+body {
+  font-family: arial;
+}
+ul,
+ol {
+  list-style-type: none;
+}
+a {
+  text-decoration-line: none;
+}
+.fd_border_red {
+  border-color: #f00;
+}
+.icon {
+  width: 1em;
+  height: 1em;
+  vertical-align: -0.15em;
+  fill: currentColor;
+  overflow: hidden;
+}
+.fd_input input:focus,
+.fd_input textarea:focus,
+.fd_input input:hover,
+.fd_input textarea:hover {
+  border-color: #0e0;
+}
+.fd_fill_btn input,
+.fd_fill_btn button,
+.fd_fill_btn a {
+  width: 100%;
+  height: 100%;
+}
+.fd_success_btn input,
+.fd_success_btn button,
+.fd_success_btn a {
+  background-color: #0e0;
+  color: #fff;
+  font-size: 1.8rem;
+  font-weight: 900;
+  letter-spacing: 8px;
+}
+.fd_success_btn input:focus,
+.fd_success_btn button:focus,
+.fd_success_btn a:focus,
+.fd_success_btn input:hover,
+.fd_success_btn button:hover,
+.fd_success_btn a:hover {
+  border-color: #009b00;
+  color: #009b00;
+}
+.fd_button_text button {
+  color: #ff7400;
+}
+div.input_clear {
+  width: 0;
+  height: 0;
+  display: none;
+}
