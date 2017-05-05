@@ -5,7 +5,6 @@ import ElementUI from 'element-ui'
 import Info from '../../components/info'
 */
 import App from './app'
-require('assets/b.css')
 Vue.use(ElementUI)
 /* eslint-disable no-new */
 new Vue({

@@ -37,8 +37,13 @@
 -->
 
 <template>
-  <div class="fd_footer">
+  <div>
+    <div class="fd_footer_fill">
 
+    </div>
+    <div class="fd_footer">
+
+    </div>
   </div>
 </template>
 

@@ -1,8 +1,8 @@
 <template>
   <div id="login">
-
+    <!--
     <fd_header>{{ title }}</fd_header>
-
+     -->
     <div class="login">
       <div class="login_main">
         <div slot="alert_title" class="login_title_main" v-show='active != "recoverpw"'>
@@ -17,8 +17,9 @@
         </div>
       </div>
     </div>
-
+    <!--
     <fd_footer icon_off_3="2"></fd_footer>
+    -->
   </div>
 </template>
 

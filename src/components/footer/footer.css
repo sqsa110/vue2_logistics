@@ -4,7 +4,7 @@
   width: 100%;
   height: 39px;
   font-size: 0;
-  background-color: #0e0;
+  background-color: #20a0ff;
 }
 #fd_footer .fd_footer_fill {
   height: 39px;
@@ -18,7 +18,7 @@
   width: 25%;
   text-align: center;
   box-sizing: border-box;
-  border-left: 1px solid #f76fbc;
+  border-left: 1px solid #1d8ce0;
 }
 .fd_footer_nav_main li:first-child {
   border-left: none;
@@ -28,7 +28,7 @@
   font-size: 2rem;
 }
 .fd_footer_nav_main .active {
-  color: #ff7400;
+  color: #f9fafc;
 }
 .fd_footer_nav_main .fd_footer_nav_box {
   position: relative;
@@ -43,8 +43,8 @@
   border-radius: 50%;
   font-size: 1.6rem;
   color: #fff;
-  background-color: #ff7400;
+  background-color: #f9fafc;
 }
 .active .fd_footer_nav_box {
-  background-color: #6ff76f;
+  background-color: #1d8ce0;
 }

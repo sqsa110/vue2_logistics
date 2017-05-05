@@ -1,12 +1,25 @@
 <template>
-  <div></div>
+  <div>
+    <h1>12216516514563</h1>
+    <fd_main>
+      <div slot="main_header">
+        <div>头部显示</div>
+      </div>
+      <div slot="data_main">
+        <fd_table>
+          <div>sldfkjlk</div>
+        </fd_table>
+      </div>
+    </fd_main>
+  </div>
 </template>
 
 <script>
-  import fd_login_main from '../../../components/login_main'
-  import '../../../../static/js/lib/jQuery.md5';
+  import fd_table from '../../../components/table/table'
+  import fd_main from '../../../components/main/pc_main'
+
   export default {
-    name : 'login',
+    name : 'test1',
     data : () => {
       return {
         loading : false
@@ -26,7 +39,7 @@
     mounted (el){
     },
     components : {
-      fd_login_main
+      fd_table,fd_main
     }
   }
 </script>

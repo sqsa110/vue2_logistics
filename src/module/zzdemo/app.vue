@@ -1,5 +1,5 @@
 <template>
-  <div id="login">
+  <div id="routerdemo">
   <!--  <el-button @click="visible = true">按钮</el-button>   -->
     <ul>
       <li><router-link to="/info">Info</router-link></li>
@@ -15,12 +15,8 @@
     name : 'app',
     data () {
       return {
-        visible:false
       }
     },
     components : {}   //components
   }
 </script>
-<style>
-
-</style>

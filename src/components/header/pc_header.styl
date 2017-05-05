@@ -1,6 +1,56 @@
-$fd_background = #20a0ff
+$fd_background1 = #20a0ff
+$fd_background2 = #fff
+$fd_color1 = #fff
+$fd_color2 = #48576a
+$fd_height = 50px
+$fd_font_size = 16px
 
 .fd_header
   width 100%
-  height 50px
-  background-color $fd_background
+  height $fd_height
+  font-size 14px
+  background-color $fd_background1
+  /*
+  background : -webkit-linear-gradient($fd_background2,$fd_background1)
+  background : -o-linear-gradient($fd_background2,$fd_background1)
+  background : -moz-linear-gradient($fd_background2,$fd_background1)
+  background : linear-gradient($fd_background2,$fd_background1)
+  */
+  .select_main
+    height $fd_height
+    line-height $fd_height
+    margin-right 10px
+    float right
+
+  h5
+    display inline-block
+    color $fd_color1
+    font-size $fd_font_size
+    margin-right 10px
+
+  .userinfo,.loginBtn
+    height $fd_height
+    margin-left 30px
+    float left
+
+  .userinfo_img_main
+    height $fd_height
+    display inline-block
+
+  .userinfo_img
+    width $fd_height
+    height $fd_height
+
+  .userinfo_text
+    font-size 12px
+    display inline-block
+    vertical-align top
+    color $fd_color1
+    p
+      height ($fd_height/2)
+      line-height ($fd_height/2)
+
+.loginBtn
+  button
+    color #fff
+    line-height ($fd_height - 20 + 5)

@@ -6,16 +6,19 @@ Vue.use(vueRouter);
 let routers = new vueRouter({
   routes : [{
     path : '/',
-    redirect : '/index'
+    redirect : '/test1'
   },{
-    path : '/index',
-    component : (reslove) => require(['./router/index'],reslove)
+    path : '/test1',
+    component : (reslove) => require(['./router/test1'],reslove)
   },{
-    path : '/register',
-    component : (reslove) => require(['./router/register'],reslove)
+    path : '/test2',
+    component : (reslove) => require(['./router/test2'],reslove)
   },{
-    path : '/recoverpw',
-    component : (reslove) => require(['./router/recoverpw'],reslove)
+    path : '/test3',
+    component : (reslove) => require(['./router/test3'],reslove)
+  },{
+    path : '/test4',
+    component : (reslove) => require(['./router/test4'],reslove)
   }]
 });
 

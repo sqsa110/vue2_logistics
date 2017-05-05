@@ -47,7 +47,13 @@
       loading : {
         type : Boolean,
         default : false
-      }
+      },
+      nameReg : {
+        type : RegExp,
+        default : function(){
+          return /^[a-zA-Z0-9]+[\w\@\-\.]{0,}$/
+        }
+      },
     },
     data () {
       return {

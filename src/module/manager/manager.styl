@@ -4,6 +4,7 @@ $fd_background = #20a0ff
 $fd_font_active = #ff7400
 $fd_button_height = 2rem
 $fd_input_height = 3rem
+$fd_left_width = 200px
 /*
 body
   background-color lighten($fd_background,90%)
@@ -11,16 +12,14 @@ body
 .middle
   float left
   width 100%
-  background orange
   position relative
   overflow hidden
 
 .middle_main
   float left
   width 100%
-  background green
   position relative
-  left 300px
+  left $fd_left_width
 
 .fd_left,.fd_main
   min-height 200px
@@ -28,14 +27,14 @@ body
   height 200px
 
 .fd_left
-  width 300px
+  width $fd_left_width
   float left
   position relative
-  margin-left -300px
+  margin-left - $fd_left_width
 
 .fd_main
   position relative
-  margin-right 300px
+  margin-right $fd_left_width
 
 
 

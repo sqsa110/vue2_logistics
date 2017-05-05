@@ -1,8 +1,8 @@
 <template>
   <div class="fd_left">
-    <ul>
-      <li v-for="item in listArr">
-        <a href="javascript:;" class="left_nav_btn"  :class="[item.active?'active' : '']">
+    <ul class="nav_list">
+      <li v-for="(item,index) in listArr">
+        <a href="javascript:;" @click.stop="switchActive($event,index)" class="left_nav_btn" :data-index="index"  :class="[item.active?'active' : '']">
           <div class="icon" :class="[item.active?'rotate_right_down' : '']">
             <svg class="icon" aria-hidden="true">
               <use xlink:href="#icon-youjiantou"></use>
@@ -10,10 +10,13 @@
           </div>
           <h5>{{ item.title }}</h5>
         </a>
-        <transition name="fade">
+        <transition
+          @enter="listEnterEl"
+          @leave="listLeaveEl"
+          :css="false">
           <ul v-show="item.active" class="nav_child_list">
             <li v-for="list in item.childs">
-              <a :href="list.href" :data-id="list.id"  :class="[list.active ? 'active' : '']">
+              <a @click.stop="set_active(list.id)" :href="list.href" :data-id="list.id"  :class="[list.active ? 'active' : '']">
                 <div class="icon">
                   <svg class="icon" aria-hidden="true">
                     <use xlink:href="#icon-jian"></use>
@@ -98,28 +101,20 @@
 </template>
 
 <script>
-  var arr = [];
-  arr[0] = {title : '测试1',id : '',active : true, href:'javascript:;',childs : [
-    {title : '测试1-1',id : 'aaaa' ,href:"#/aaaa",active : true},
-    {title : '测试1-2',id : 'bbbb' ,href:"#/bbbb"},
-    {title : '测试1-3',id : 'cccc' ,href:"#/cccc"},
-    {title : '测试1-4',id : 'dddd' ,href:"#/dddd"},
-  ]};
-  arr[1] = {title : '测试2',href:'javascript:;',childs : [
-    {title : '测试2-1',id : 'aaaa' ,href:"#/aaaa"},
-    {title : '测试2-2',id : 'bbbb' ,href:"#/bbbb"},
-    {title : '测试2-3',id : 'cccc' ,href:"#/cccc"},
-    {title : '测试2-4',id : 'dddd' ,href:"#/dddd"},
-  ]};
-  arr[2] = {title : '测试3',href:'javascript:;',childs : []};
 
   export default {
     name : 'app',
+    props : {
+      nav_list : {
+        type : Array,
+        default : []
+      }
+    },
     data () {
       return {
         active : "login",
         title : "",
-        listArr : arr
+        listArr : this.nav_list
       }
     },
     methods : {
@@ -134,25 +129,51 @@
           listArr = this.listArr[i];
           count = false;
           for (let j=0,maxj=listArr.childs.length;j<maxj;j++) {
-            listArr2 = listArr[j];
+            listArr2 = listArr.childs[j];
             if (name == listArr2.id) {
-              listArr2.active = true;
+              this.$set(this.listArr[i].childs[j],'active',true);
               count = true;
             } else {
-              listArr2.active = false;
+              this.$set(this.listArr[i].childs[j],'active',false);
             }
           }
           if (count) {
-            listArr.active = true;
+            this.$set(this.listArr[i],'active',true);
           } else {
-            listArr.active = false;
+            this.$set(this.listArr[i],'active',false);
           }
         }
-      }
-    },
-    createds () {
-      console.log(this);
+        this.$emit('router_click',name)
+      },
+      switchActive (ev,count) {
 
+        for (let i=0,maxi=this.listArr.length;i<maxi;i++) {
+
+          if (count == i) {
+            this.listArr[i].active = true;
+          } else {
+            this.listArr[i].active = false;
+          }
+        }
+
+      },
+      listEnterEl(el,done){
+        const $el = $(el);
+        const $li = $el.find('li');
+        $(el).animate({
+          height : $li.length * $li.eq(0).outerHeight()
+        },500,function(){
+          done && done();
+        });
+      },
+      listLeaveEl(el,done) {
+        $(el).animate({
+          height : 0
+        },200,function(){
+          done && done();
+        });
+      //  done();
+      }
     },
     created (){
 

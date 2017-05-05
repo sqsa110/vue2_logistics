@@ -2,6 +2,7 @@ $fd_background = #fff
 $fd_color1 = #000
 $fd_color2 = #20a0ff
 $fd_nav_height = 50px
+$fd_nav_weight = 200px
 
 
 @-webkit-keyframes rotate_right_down
@@ -70,11 +71,11 @@ $fd_nav_height = 50px
   -ms-transform rotate(90deg)
   -o-transform rotate(90deg)
   transform rotate(90deg)
-  -webkit-animation rotate_right_down 1s
-  -moz-animation rotate_right_down 1s
-  -ms-animation rotate_right_down 1s
-  -o-animation rotate_right_down 1s
-  animation rotate_right_down 1s
+  -webkit-animation rotate_right_down 0.5s
+  -moz-animation rotate_right_down 0.5s
+  -ms-animation rotate_right_down 0.5s
+  -o-animation rotate_right_down 0.5s
+  animation rotate_right_down 0.5s
 
 .rotate_down_right
   -webkit-transform rotate(0)
@@ -82,16 +83,18 @@ $fd_nav_height = 50px
   -ms-transform rotate(0)
   -o-transform rotate(0)
   transform rotate(0)
-  -webkit-animation rotate_down_right 1s
-  -moz-animation rotate_down_right 1s
-  -ms-animation rotate_down_right 1s
-  -o-animation rotate_down_right 1s
-  animation rotate_down_right 1s
+  -webkit-animation rotate_down_right 0.5s
+  -moz-animation rotate_down_right 0.5s
+  -ms-animation rotate_down_right 0.5s
+  -o-animation rotate_down_right 0.5s
+  animation rotate_down_right 0.5s
 
 .fd_left
   background-color $fd_background
-  min-width 300px
+  min-width $fd_nav_weight
   color $fd_color1
+  border-right 1px solid #ccc
+  box-sizing border-box
   ul
     clear both
     padding-left 20px
@@ -99,7 +102,8 @@ $fd_nav_height = 50px
     min-height $fd_nav_height
     background-color #fff
     font-size 0
-    overflow auto
+    width 100%
+    clear both
 
   .icon,h5
     height $fd_nav_height
@@ -110,18 +114,28 @@ $fd_nav_height = 50px
 
   h5
     text-indent 10px
+    width 80%
 
   a
     color $fd_color1
+    transform rotate(0)
 
   .active
     color $fd_color2
+    transform rotate(90deg)
 
   .icon
     transform-origin 80% center
 
+  .nav_child_list
+    overflow hidden
+/*
 .fade-enter-active,.fade-leave-active
-  transition opacity 5s ease-out
+  transition height 1s
+
+.fade-enter-to,.fade-leave
+  height 100%
 
 .fade-enter,.fade-leave-to
-  opacity 0
+  height 0
+*/

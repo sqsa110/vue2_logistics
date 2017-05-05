@@ -9,11 +9,10 @@ Vue.use(ElementUI);
 Vue.use(VueRouter);
 
 new Vue({
-  name : 'login_main',
+  name : 'login_init',
   el : '#app',
   router,
   render : h => h(App),
   mounted(){
-
   }
 });

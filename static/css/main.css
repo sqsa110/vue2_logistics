@@ -43,6 +43,7 @@ th {
 html,
 body {
   font-size: 10px;
+  height: 100%;
 }
 body {
   font-family: arial;
@@ -68,7 +69,7 @@ a {
 .fd_input textarea:focus,
 .fd_input input:hover,
 .fd_input textarea:hover {
-  border-color: #0e0;
+  border-color: #20a0ff;
 }
 .fd_fill_btn input,
 .fd_fill_btn button,
@@ -79,7 +80,7 @@ a {
 .fd_success_btn input,
 .fd_success_btn button,
 .fd_success_btn a {
-  background-color: #0e0;
+  background-color: #20a0ff;
   color: #fff;
   font-size: 1.8rem;
   font-weight: 900;
@@ -91,11 +92,11 @@ a {
 .fd_success_btn input:hover,
 .fd_success_btn button:hover,
 .fd_success_btn a:hover {
-  border-color: #009b00;
-  color: #009b00;
+  border-color: #1d8ce0;
+  color: #1d8ce0;
 }
 .fd_button_text button {
-  color: #ff7400;
+  color: #f9fafc;
 }
 div.input_clear {
   width: 0;

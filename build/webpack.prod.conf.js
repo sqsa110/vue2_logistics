@@ -77,7 +77,7 @@ module.exports = merge(baseWebpackConfig, {
     // }),
     new webpack.optimize.CommonsChunkPlugin({
         name: 'vendors', // 将公共模块提取，生成名为`vendors`的chunk
-        chunks: ['index','info'], //提取哪些模块共有的部分
+        chunks: ['index','info','login','login_m','manager','routerdemo'], //提取哪些模块共有的部分
         minChunks: 2 // 提取至少2个模块共有的部分
     }),
     // // extract webpack runtime and module manifest to its own file in order to

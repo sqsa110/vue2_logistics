@@ -68,11 +68,11 @@
   -ms-transform: rotate(90deg);
   -o-transform: rotate(90deg);
   transform: rotate(90deg);
-  -webkit-animation: rotate_right_down 1s;
-  -moz-animation: rotate_right_down 1s;
-  -ms-animation: rotate_right_down 1s;
-  -o-animation: rotate_right_down 1s;
-  animation: rotate_right_down 1s;
+  -webkit-animation: rotate_right_down 0.5s;
+  -moz-animation: rotate_right_down 0.5s;
+  -ms-animation: rotate_right_down 0.5s;
+  -o-animation: rotate_right_down 0.5s;
+  animation: rotate_right_down 0.5s;
 }
 .rotate_down_right {
   -webkit-transform: rotate(0);
@@ -80,16 +80,18 @@
   -ms-transform: rotate(0);
   -o-transform: rotate(0);
   transform: rotate(0);
-  -webkit-animation: rotate_down_right 1s;
-  -moz-animation: rotate_down_right 1s;
-  -ms-animation: rotate_down_right 1s;
-  -o-animation: rotate_down_right 1s;
-  animation: rotate_down_right 1s;
+  -webkit-animation: rotate_down_right 0.5s;
+  -moz-animation: rotate_down_right 0.5s;
+  -ms-animation: rotate_down_right 0.5s;
+  -o-animation: rotate_down_right 0.5s;
+  animation: rotate_down_right 0.5s;
 }
 .fd_left {
   background-color: #fff;
-  min-width: 300px;
+  min-width: 200px;
   color: #000;
+  border-right: 1px solid #ccc;
+  box-sizing: border-box;
 }
 .fd_left ul {
   clear: both;
@@ -99,7 +101,8 @@
   min-height: 50px;
   background-color: #fff;
   font-size: 0;
-  overflow: auto;
+  width: 100%;
+  clear: both;
 }
 .fd_left .icon,
 .fd_left h5 {
@@ -111,24 +114,32 @@
 }
 .fd_left h5 {
   text-indent: 10px;
+  width: 80%;
 }
 .fd_left a {
   color: #000;
+  transform: rotate(0);
 }
 .fd_left .active {
   color: #20a0ff;
+  transform: rotate(90deg);
 }
 .fd_left .icon {
   transform-origin: 80% center;
 }
-.fade-enter-active,
-.fade-leave-active {
-  transition: opacity 5s ease-out;
+.fd_left .nav_child_list {
+  overflow: hidden;
 }
-.fade-enter,
-.fade-leave-to {
-  opacity: 0;
-}
+/*
+.fade-enter-active,.fade-leave-active
+  transition height 1s
+
+.fade-enter-to,.fade-leave
+  height 100%
+
+.fade-enter,.fade-leave-to
+  height 0
+*/
 @-moz-keyframes rotate_right_down {
   from {
     transform: rotate(0);

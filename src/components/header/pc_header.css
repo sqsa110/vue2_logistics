@@ -1,5 +1,52 @@
 .fd_header {
   width: 100%;
   height: 50px;
+  font-size: 14px;
   background-color: #20a0ff;
+/*
+  background : -webkit-linear-gradient($fd_background2,$fd_background1)
+  background : -o-linear-gradient($fd_background2,$fd_background1)
+  background : -moz-linear-gradient($fd_background2,$fd_background1)
+  background : linear-gradient($fd_background2,$fd_background1)
+  */
+}
+.fd_header .select_main {
+  height: 50px;
+  line-height: 50px;
+  margin-right: 10px;
+  float: right;
+}
+.fd_header h5 {
+  display: inline-block;
+  color: #fff;
+  font-size: 16px;
+  margin-right: 10px;
+}
+.fd_header .userinfo,
+.fd_header .loginBtn {
+  height: 50px;
+  margin-left: 30px;
+  float: left;
+}
+.fd_header .userinfo_img_main {
+  height: 50px;
+  display: inline-block;
+}
+.fd_header .userinfo_img {
+  width: 50px;
+  height: 50px;
+}
+.fd_header .userinfo_text {
+  font-size: 12px;
+  display: inline-block;
+  vertical-align: top;
+  color: #fff;
+}
+.fd_header .userinfo_text p {
+  height: 25px;
+  line-height: 25px;
+}
+.loginBtn button {
+  color: #fff;
+  line-height: 35px;
 }

@@ -5,16 +5,14 @@ body
 .middle {
   float: left;
   width: 100%;
-  background: #ffa500;
   position: relative;
   overflow: hidden;
 }
 .middle_main {
   float: left;
   width: 100%;
-  background: #008000;
   position: relative;
-  left: 300px;
+  left: 200px;
 }
 .fd_left,
 .fd_main {
@@ -23,12 +21,12 @@ body
   height: 200px;
 }
 .fd_left {
-  width: 300px;
+  width: 200px;
   float: left;
   position: relative;
-  margin-left: -300px;
+  margin-left: -200px;
 }
 .fd_main {
   position: relative;
-  margin-right: 300px;
+  margin-right: 200px;
 }
