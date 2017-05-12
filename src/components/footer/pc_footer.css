@@ -1,8 +1,12 @@
+.fd_footers {
+  position: relative;
+  clear: both;
+}
 .fd_footer,
-.fd_footer_fill {
+.fd_footer_fill,
+.fd_footers {
   width: 100%;
   height: 50px;
-  clear: both;
 }
 .fd_footer {
   position: absolute;

@@ -1,13 +1,17 @@
 
 (function($){
   function Jq_tools () {
+    this.tools = {};
     this.init();
+    this.jq_push();
   }
   Jq_tools.prototype.init = function (){
     this.search();
     this.getVueRouteName();
     this.cookieOper();
     this.oper_cookie();
+    this.get_date_time();
+    this.num_two();
   };
 
   //读取url参数信息
@@ -94,12 +98,10 @@
       return obj;
     }
 
-    $.extend({
-      getSearch : function(opt,off){
-        var getSearch = new Search();
-        return getSearch.init(opt,off);
-      }
-    });
+    this.tools.search = function(opt,off){
+      var getSearch = new Search();
+      return getSearch.init(opt,off);
+    }
   };
 
   //读取vue路由
@@ -119,12 +121,10 @@
       }
     };
 
-    $.extend({
-      getVueRouteName : function(opt,off){
-        var getVueRouteName = new GetVueRouteName();
-        return getVueRouteName.init(opt,off);
-      }
-    });
+    this.tools.getVueRouteName = function(opt,off){
+      var getVueRouteName = new GetVueRouteName();
+      return getVueRouteName.init(opt,off);
+    }
   };
 
   //设置cookie操作
@@ -246,16 +246,15 @@
 
     }
 
-    $.extend({
-      cookieOper : function(key,value,time){
-        var cookies = new CookieOper();
-        return cookies.init(key,value,time);;
-      }
-    });
+    this.tools.cookieOper = function(key,value,time){
+      var cookies = new CookieOper();
+      return cookies.init(key,value,time);;
+    };
+
   };
 
   //设置操作页面缓存
-  Jq_tools.prototype.oper_cookie = function (arg1,arg2,arg3,arg4,arg5) {
+  Jq_tools.prototype.oper_cookie = function (arg1,arg2,arg3,arg4,arg5,off) {
     function Oper_Cookie (arg1,arg2,arg3,arg4,arg5,off){
       this.len = arguments.length;
       if (this.len <= 0) {return};
@@ -452,12 +451,60 @@
       return val.val;
     };
 
-    $.extend({
-      oper_cookie : function (arg1,arg2,arg3,arg4,arg5,off) {
-        var oper_cookie = new Oper_Cookie(arg1,arg2,arg3,arg4,arg5,off);
-        return oper_cookie.init();
+    this.tools.oper_cookie = function(arg1,arg2,arg3,arg4,arg5,off){
+      var oper_cookie = new Oper_Cookie(arg1,arg2,arg3,arg4,arg5,off);
+      return oper_cookie.init();
+    };
+
+  };
+
+  //读取日期时间
+  Jq_tools.prototype.get_date_time = function(date,types){
+
+    this.tools.get_date_time = function(date,types){
+      date = Number(date);
+      if (isNaN(date) || date <= 0) {
+        return ''
       }
-    });
+      let time = new Date(date);
+      let data = {};
+      let date_fd,time_fd;
+      data.year = time.getFullYear();
+      data.month = $.num_two(time.getMonth() - 0 + 1);
+      data.date = $.num_two(time.getDate());
+      data.day = $.num_two(time.getDay());
+      data.h = $.num_two(time.getHours());
+      data.m = $.num_two(time.getMinutes());
+      data.s = $.num_two(time.getSeconds());
+      data.date = data.year + '-' + data.month + '-' + data.date;
+      data.time = data.h + ':' + data.m + ':' + data.s;
+      data.datetime = data.date + ' ' + data.time;
+      if (types == 'date') {
+        return data.date;
+      } else if (types == 'time') {
+        return data.time;
+      } else if (types == 'datetime') {
+        return data.datetime;
+      } else {
+        return data;
+      }
+    };
+
+  };
+
+  //数字补双
+  Jq_tools.prototype.num_two = function(num){
+    this.tools.num_two = function(num){
+      if (num < 10) {
+        num = '0' + num;
+      }
+      return num;
+    };
+  };
+
+  //并入jq
+  Jq_tools.prototype.jq_push = function(){
+    $.extend(this.tools);
   };
 
   new Jq_tools();

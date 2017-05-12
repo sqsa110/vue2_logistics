@@ -9,3 +9,15 @@
   margin-bottom: 0;
   width: 45%;
 }
+.fd_pagination {
+  margin-top: 20px;
+  margin-right: 20px;
+  float: right;
+}
+.fd_pagination .fd_demonstration,
+.fd_pagination .el-pagination {
+  float: right;
+}
+.fd_pagination .fd_demonstration {
+  line-height: 32px;
+}

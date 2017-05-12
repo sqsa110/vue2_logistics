@@ -34,15 +34,15 @@
 <template>
   <div>
     <transition name="fade">
-      <div class="fd_alert" v-if="showOff">
-        <div class="alert_mask" @click="cancelAction(false)" v-show="mask_off">
+      <div class="fd_alert" v-if="off">
+        <div class="alert_mask" @click="cancelAction(true)" v-show="mask_off">
         </div>
-        <div class="alert_from" @click="cancelAction(false)">
+        <div class="alert_from" @click="cancelAction(true)">
           <div class="alert_main" @click.stop>
             <div class="alert_title_box el-message-box__header">
               <slot name="alert_title">
                 <div class="el-message-box__title"> {{ title }} </div>
-                <i class="alert_icon_close el-message-box__close el-icon-close" @click=""></i>
+                <i class="alert_icon_close el-message-box__close el-icon-close" @click="cancelAction(false)"></i>
               </slot>
             </div>
             <div class="alert_box">
@@ -97,24 +97,36 @@
       },
       showOff : {
         type : Boolean,
-        default : false
+        default : true
       },
       mask_off : {
         type : Boolean,
         default : true
       }
     },
-    data : () => {
+    data () {
       return {
         loadingOff : false,
+        off : this.showOff,
       }
     },
     methods : {
-      cancelAction (){
+      cancelAction (mask){
+        console.log(mask)
+        if (mask && !this.maskClickOff) {
+          return ;
+        }
+        this.off = false;
         this.$emit('alert_cancel',false);
       },
       finishAction (){
-        this.$emit('alert_finish',false);
+        this.loadingOff = true;
+        this.$emit('alert_finish',function(off){
+          this.loadingOff = false;
+          if (off) {
+            this.off = false;
+          }
+        }.bind(this));
       },
     }
   }

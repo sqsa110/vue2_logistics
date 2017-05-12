@@ -14,6 +14,7 @@
   height: 100%;
   opacity: 0.5;
   background: #000;
+  z-index: 1000;
 }
 .alert_from {
   position: fixed;
@@ -22,6 +23,7 @@
   left: 0;
   right: 0;
   text-align: center;
+  z-index: 1001;
 }
 .alert_from:after {
   content: '';
@@ -36,10 +38,10 @@
   vertical-align: middle;
   background-color: #fff;
   width: 70%;
-  border-radius: 3px;
+  max-height: 80%;
+  overflow: auto;
   font-size: 16px;
   padding: 0 20px 20px;
-  overflow: hidden;
   backface-visibility: hidden;
   border-radius: 10px;
 }
