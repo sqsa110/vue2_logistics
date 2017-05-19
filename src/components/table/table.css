@@ -21,3 +21,10 @@
 .fd_pagination .fd_demonstration {
   line-height: 32px;
 }
+.down_file {
+  -webkit-transform: rotateZ(180deg);
+  -moz-transform: rotateZ(180deg);
+  -o-transform: rotateZ(180deg);
+  -ms-transform: rotateZ(180deg);
+  transform: rotateZ(180deg);
+}

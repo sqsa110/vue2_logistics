@@ -45,49 +45,38 @@
           <el-table
             v-loading.body="loading"
             ref="multipleTable"
-            :data="userArr"
+            :data="data_list"
             tooltip-effect="dark"
             :stripe="true"
-            show-summary
-            :summary-method="getSummaries"
+            :show-summary="summary_off"
+            :summary-method="get_summaries"
             :default-sort = "sort_rule"
             @selection-change="handleSelectionChange"
             style="width:100%">
 
             <el-table-column
               type="selection"
-              v-if="checkOff"
+              v-if="check_off"
               width="55">
             </el-table-column>
 
             <el-table-column
               width="55"
-              v-if="expandOff"
+              v-if="expand_off"
               type="expand">
               <template scope="props">
                 <el-form label-position="left" inline class="demo-table-expand">
-                  <el-form-item v-for="(val,key) in titleArr"  :label="val.val">
-                    <span v-if="val.type == 'select'">{{props.row[key + 'name']}}</span>
-                    <span v-else-if="val.type == 'date' || val.type == 'time' || val.type == 'datetime'">{{props.row[key + '_fd']}}</span>
-                    <span v-else>{{props.row[key]}}</span>
+                  <el-form-item v-for="(val,key) in title_list"  :label="val.val" :formatter="val.formatter">
+                    <span v-if="val.type == 'date' || val.type == 'time' || val.type == 'datetime'">{{props.row[key + '_fd']}}</span>
+                    <span v-else>{{ val.formatter ? val.formatter(props.row[key]) : props.row[key] }}</span>
                   </el-form-item>
                 </el-form>
               </template>
             </el-table-column>
 
             <el-table-column
-              v-for="(val,key) in titleArr"
-              v-if="val.show && val.type == 'select'"
-              :label="val.val"
-              :width="val.width"
-              :align="val.align"
-              :sortable="val.sortable"
-              :sort-method="val.sortFn"
-              :prop="(key + 'name')">
-            </el-table-column>
-
-            <el-table-column
-              v-else-if="val.show && (val.type == 'date' || val.type == 'time' || val.type == 'datetime')"
+              v-for="(val,key) in title_list"
+              v-if="val.show && (val.type == 'date' || val.type == 'time' || val.type == 'datetime')"
               :label="val.val"
               :width="val.width"
               :align="val.align"
@@ -103,10 +92,12 @@
               :align="val.align"
               :sortable="val.sortable"
               :sort-method="val.sortFn"
+              :formatter="val.formatter"
               :prop="key">
             </el-table-column>
 
             <el-table-column
+              v-if="operation_off"
               width="200"
               align="center"
               label="操作">
@@ -122,20 +113,29 @@
             <el-pagination
               @size-change="handleSizeChange"
               @current-change="handleCurrentChange"
-              :current-page.sync="currentPage2"
+              :current-page.sync="current_page"
               :page-sizes="page_sizes"
               :page-size="page_size"
               layout="sizes,prev,pager,next"
               :total="1000">
             </el-pagination>
             <div class="fd_demonstration">
-              <span>显示条数</span>
+              <span>{{page_title}}</span>
             </div>
           </div>
 
+
           <div style="margin-top: 20px">
-            <el-button @click="showdata()">查看数据</el-button>
-          </div>
+            <!--
+             <el-button @click="showdata()">查看数据</el-button>
+             -->
+            <el-button-group>
+              <el-button type="primary" @click="handlePush" icon="plus"></el-button>
+              <el-button type="primary" @click="handleDeleteSelect" icon="delete2"></el-button>
+              <el-button class="down_file" type="primary" icon="upload2"></el-button>
+              <el-button type="primary" icon="more"></el-button>
+            </el-button-group>
+         </div>
 
         </slot>
       </div>
@@ -147,13 +147,15 @@
       :btnsOff="true"
       :cancelOff="true"
       :maskClickOff="false"
+      :cancel_title="cancel_title"
+      :finish_title="finish_title"
       @alert_cancel="alert_cancel"
       @alert_finish="alert_finish">
       <slot name="alert_info">
         <el-form ref="edit_form" :rules="rules" :model="edit_form" label-width="80px">
 
           <el-row>
-            <template v-for="(val,key) in titleArr" v-if="((val.type == 'datetime' || val.type == 'date' || val.type == 'time' || val.type != 'sys') && !val.edit)">
+            <template v-for="(val,key) in title_list" v-if="((val.type == 'datetime' || val.type == 'date' || val.type == 'time' || val.type != 'sys') && !val.edit)">
               <el-col v-if="val.size == 'big'" :span="24">
                 <el-form-item :label="val.val" :prop="key">
                   <el-input v-if="val.type == 'string'"  :disabled="val.disabled" v-model="edit_form[key]"></el-input>
@@ -195,158 +197,133 @@
   import fd_alert from '../alert'
   import '../../../static/js/util/fd_tools'
 
-  let userArr = [
-    {id:1,name:'lxl',age:29,add:"gz",phone:"15811111111",city:10001,cityname:'广州',date:1494408264222},
-    {id:2,name:'aaa',age:30,add:"zz",phone:"15822222222",city:10002,cityname:'上海',date:1494408264222},
-    {id:3,name:'bbb',age:31,add:"dd",phone:"15833333333",city:10003,cityname:'北京',date:1494408264222},
-    {id:4,name:'ccc',age:32,add:"dd",phone:"15844444444",city:10001,cityname:'广州',date:1494408264222},
-    {id:5,name:'ddd',age:33,add:"ss",phone:"15855555555",city:10002,cityname:'上海',date:''},
-  ];
-  let titleArr = {
-      id:{show:true,type:'sys',val:"序号",width:100,align:"center",sortable:true},
-      name:{show:true,type:'string',val:'名称',width:100,align:"center",},
-      add:{show:true,type:'string',val:'地址',size:'big'},
-      phone:{show:true,type:'string',val:'电话',width:300,sortable:true,sortFn:function(a,b){
-        console.log(a);
-        console.log(b);
-        return a - b
-      }},
-      remarks:{show:false,type:'textarea',size:'big',val:'备注',width:300,sortable:true,sortFn:function(a,b){
-      console.log(a);
-      console.log(b);
-      return a - b
-    }},
-      city : {show:true,type:'select',val:'城市',remind:'请选择城市',sortable:true,align:"center",list:[
-        {val:10001,name:'广州'},
-        {val:10002,name:'上海'},
-        {val:10003,name:'北京'}
-      ]},
-      date : {show:true,type:'datetime',val:'日期',sortable:true,align:"center",time:true,edit:false,remind:'请选择时间'}
-  };
 
   export default {
     name : 'fd_table',
-    data (){
-      return {
-        loading : true,
-        titleArr : titleArr,
-        userArr : userArr,
-        checkArr : [],
-        checkOff : false,
-        expandOff : true,
-        show_alert_off : false,
-        currentPage2 : 5,
-        alert_title : '' ,
-        edit_form : {},
-        rules : {
-          name : [
-            {required:true, message:'请输入名称'},
-            {min:3,max:20, message:'长度在3-20个字符'}
-          ],
-          age : [
-            {type:'number',message:'电话必须为数字'}
-          ],
-          city : [
-            {required:true,message:'请选择地区'}
-          ]
-        },
-        cancelTitle : '取消',
-        finishTitle : '提交',
-        handleSizeChange(val) {
-          console.log('每页' + val + '条')
-        },
-        handleCurrentChange(val) {
-          this.$emit('')
-          console.log('当前页' + val);
-        },
-        page_sizes : [100,200,300,400],
-        page_size : 100,
-        sort_rule : {
-          prop : 'id',
-          order : 'descending'
-        }
-      }
-    },
     props : {
-      id : {
+      title_list : {
+        type : Object,
+        default : {}
+      },
+      datas : {
+        type : Array,
+        default : []
+      },
+      check_off : {
+        type : Boolean,
+        default : false
+      },
+      expand_off : {
+        type : Boolean,
+        default : false
+      },
+      operation_off : {
+        type : Boolean,
+        default : false
+      },
+      summary_off : {
+        type : Boolean,
+        default : false
+      },
+      current_page : {
+        type : Number,
+        default : 5
+      },
+      alert_title : {
         type : String,
         default : ''
+      },
+      rules : {
+        type : Object,
+        default : {}
+      },
+      cancel_title : {
+        type : String,
+        default : '取消'
+      },
+      finish_title : {
+        type : String,
+        default : '提交'
+      },
+      page_title : {
+        type : String,
+        default : '显示条数'
+      },
+      page_sizes : {
+        type : Array,
+        default : []
+      },
+      page_size : {
+        type : Number,
+        default : 1
+      },
+      sort_rule : {
+        type : Object,
+        default : {}
+      },
+      get_summaries : '',
+      loading : {
+        type : Boolean,
+        default : false
+      }
+    },
+    data (){
+      return {
+        show_alert_off : false,
+        edit_form : {},
+        edit_form_data : {},
+        edit_state : 'edit',
+        data_list : this.datas
       }
     },
     mounted : function(){
-      setTimeout(function(){
-        this.loading = false;
-      }.bind(this),1000);
+
+    },
+    beforeUpdate (){
+      console.log('我更新了数据');
+      this.$set(this._data,'data_list',this.datas);
     },
     methods : {
       handleSelectionChange(val){
         this.multipleSelection = val;
+        this.$emit('selection_change',val);
       },
       showdata(){
-        console.log(this.multipleSelection);
-      },
-      getSummaries(param){
-        const { columns,data } = param;
-        const sums = [];
-        columns.forEach((column,index) => {
-          if (index === 0) {
-            sums[index] = '总价';
-            return;
-          }
-          if (column.property == 'id' || column.property == 'date_fd' || column.property == 'datetime_fd' || column.property == 'time_fd') {
-            sums[index] = '';
-            return;
-          }
-          const values = data.map(item => Number(item[column.property]));
-          if (!values.every(value => isNaN(value))) {
-            sums[index] = values.reduce((prev,curr) => {
-              const value = Number(curr);
-              if (!isNaN(value)) {
-                return prev + curr;
-              } else {
-                return prev;
-              }
-            },0);
-            sums[index] += ' 元';
-          } else {
-            sums[index] = '';
-          }
-        });
-
-        return sums;
+        this.$emit('showdata');
+      //  console.log(this.multipleSelection);
       },
       handleEdit(index,coldata){
+        this.$emit('handle_edit',index,coldata);
         let data = {};
-        data = $.extend(data,coldata);
+        data = $.extend(data,coldata,true);
         this.$set(this._data,'edit_form',data);
         this.$set(this._data,'show_alert_off',true);
+        this.$set(this._data,'edit_form_data',coldata);
       },
       handleDelete(index,coldata){
-        console.log(index)
-        console.log(coldata)
+        this.$set(coldata,'fd_loadingOff',true);
         this.$confirm('此操作将永久删除该信息, 是否继续?', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
 
-          this.$set(coldata,'fd_loadingOff',true);
-          setTimeout(function(){
-            for (var i=0,maxi=this.userArr.length;i<maxi;i++) {
-              if (coldata == this.userArr[i]) {
-                this.userArr.splice(i,1);
-                this.$set(this._data,'userArr',this.userArr);
-                break;
+          this.$emit('handle_delete',index,coldata,function(off){
+            if (off) {
+              for (var i=0,maxi=this.data_list.length;i<maxi;i++) {
+                if (coldata == this.data_list[i]) {
+                  this.data_list.splice(i,1);
+                  this.$set(this._data,'data_list',this.data_list);
+                  break;
+                }
               }
+              this.$message({
+                type: 'success',
+                message: '删除成功!'
+              });
             }
-
-            this.$message({
-              type: 'success',
-              message: '删除成功!'
-            });
             this.$set(coldata,'fd_loadingOff',false);
-
-          }.bind(this),2000);
+          }.bind(this));
 
         }).catch(() => {
           this.$message({
@@ -355,20 +332,17 @@
           });
         });
 
-        console.log(index)
-        console.log(coldata)
+
       },
       alert_finish(callback){
-        let rule = 'edit_form';
-        console.log('完成');
 
-        setTimeout(function(){
-          this.$refs[rule].validate((valid) => {
-            if (valid) {
-              alert('submit!');
-              this.userArr.forEach(function(v,i){
-                if (v.id == this.edit_form.id) {
-                  $.each(this.titleArr,function(key,val){
+        let rule = 'edit_form';
+        this.$refs[rule].validate((valid) => {
+          if (valid) {
+            if (this.edit_form_data !== '') {
+              this.data_list.forEach(function(v,i){
+                if (v == this.edit_form_data ) {
+                  $.each(this.title_list,function(key,val){
 
                     //如果值相等跳出循环
                     if (this.edit_form[key] === v[key]) {
@@ -380,35 +354,42 @@
                       this.edit_form[key] = this.edit_form[key].getTime();
                       this.edit_form[key + fd_config.sign] = $.get_date_time(this.edit_form[key],val.type);
 
-                    } else if (val.type == 'select') {
-                      //判断是否是下拉框
+                    }
 
-                      $.each(val.list,function(j,t){
-                        if (t.val == this.edit_form[key]) {
-                          this.edit_form[key + 'name'] = t.name;
-                        }
-                      }.bind(this));
+                  }.bind(this));
+                  this.$emit('alert_edit_finish',this.edit_form,function(off){
+                    callback && callback(off);
+                    this.$set(this._data,'show_alert_off',false);
+                    if (off) {
+                      this.$set(this.data_list,i,this.edit_form);
                     }
                   }.bind(this));
-                  console.log(this.edit_form);
-                  this.$set(this.userArr,i,this.edit_form);
+
+                  return true;
                 }
               }.bind(this));
-              callback && callback(true);
-              this.$set(this._data,'show_alert_off',false);
-            }  else {
-              console.log('error submit!!');
-              callback && callback();
-              return false;
+            } else {
+              this.$emit('alert_push_finish',this.edit_form,function(off){
+                callback && callback(off);
+                this.$set(this._data,'show_alert_off',false);
+                if (off) {
+                  this.data_list.push(this.edit_form);
+                  //  this.$set(this.data_list,i,this.edit_form);
+                }
+              }.bind(this));
             }
-          });
-
-        }.bind(this),1000);
+          }  else {
+            console.log('error submit!!');
+            callback && callback();
+            return false;
+          }
+        });
 
       },
       alert_cancel(rule){
         console.log('取消');
-        this.$set(this._data,'show_alert_off',false)
+        this.$set(this._data,'show_alert_off',false);
+        this.$emit('alert_cancel');
       },
       dateChangeFormat(date){
         /*
@@ -426,16 +407,37 @@
         */
       },
       format_date(key,types){
-        this.userArr.forEach(function(val,i){
+        this.data_list.forEach(function(val,i){
           val[key + fd_config.sign] = $.get_date_time(val[key],types);
         });
+      },
+      handleSizeChange(val) {
+        this.$emit('handle_size_change',val);
+        console.log('每页' + val + '条')
+      },
+      handleCurrentChange(val) {
+        this.$emit('handle_current_change',val);
+        console.log('当前页' + val);
+      },
+      handlePush () {
+        this.$emit('handle_push');
+        let data = {};
+        for (let i in this.title_list) {
+          data[i] = '';
+        }
+        this.$set(this._data,'edit_form',data);
+        this.show_alert_off = true;
+        this.$set(this._data,'edit_form_data','');
+      },
+      handleDeleteSelect(){
+        this.$emit('handle_delete_select');
       }
     },
     computed : {
 
     },
     created : function(){
-      $.each(this.titleArr,function(key,val){
+      $.each(this.title_list,function(key,val){
 
         if (val.type == 'date' || val.type == 'time' || val.type == 'datetime') {
           this.format_date(key,val.type);
