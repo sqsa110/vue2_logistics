@@ -1,8 +1,9 @@
 <template>
   <div>
     <fd_main>
-      <div slot="main_header">
-        <div>头部显示</div>
+      <div slot="main_header" class="main_header">
+        <div class="histogram chart"></div>
+        <div class="piechart chart"></div>
       </div>
       <div slot="data_main" v-loading="loading">
         <fd_table
@@ -30,66 +31,6 @@
         :page_total="page_total"
         :sort_rule="sort_rule">
           <div>sldfkjlk</div>
-          <!--
-          <div slot="search_main">
-            <el-form ref="select_form" :model="select_form" :class="{'el-form-heigh':selectFormSwitchOff}">
-
-              <el-form-item label="活动形式">
-                <el-input v-model="select_form.desc"></el-input>
-              </el-form-item>
-
-              <el-form-item label="活动名称">
-                <el-input v-model="select_form.name"></el-input>
-              </el-form-item>
-
-              <el-form-item label="活动区域">
-                <el-select v-model="select_form.region" placeholder="请选择活动区域">
-                  <el-option label="区域一" value="sh"></el-option>
-                  <el-option label="区域二" value="bj"></el-option>
-                </el-select>
-              </el-form-item>
-
-              <el-form-item label="活动时间">
-                <el-date-picker type="datetime" placeholder="开始日期" v-model="select_date1"></el-date-picker>
-                <el-date-picker type="datetime" placeholder="结束日期" v-model="select_date1"></el-date-picker>
-              </el-form-item>
-
-              <el-form-item label="即时配送">
-                <el-switch on-text="" off-text="" v-model="select_form.delivery"></el-switch>
-              </el-form-item>
-
-              <el-form-item label="活动性质">
-                <el-checkbox-group v-model="select_form.type">
-                  <el-checkbox label="美食/餐厅线上活动" name="type"></el-checkbox>
-                  <el-checkbox label="地推活动" name="type"></el-checkbox>
-                  <el-checkbox label="线下主题活动" name="type"></el-checkbox>
-                  <el-checkbox label="单纯品牌曝光" name="type"></el-checkbox>
-                </el-checkbox-group>
-              </el-form-item>
-
-              <el-form-item label="特殊资源">
-                <el-radio-group v-model="select_form.resource">
-                  <el-radio label="线上品牌商赞助"></el-radio>
-                  <el-radio label="线下场地免费"></el-radio>
-                </el-radio-group>
-              </el-form-item>
-
-              <el-form-item label="活动形式">
-                <el-input v-model="select_form.desc"></el-input>
-              </el-form-item>
-
-              <el-form-item>
-                <el-button type="primary" @click="select_submit">查询</el-button>
-              </el-form-item>
-
-            </el-form>
-
-            <div class="demo-block-control" @click="select_form_switch">
-              <i :class="[selectFormSwitchOff ? 'el-icon-caret-top' : 'el-icon-caret-bottom']"></i>
-              <span></span>
-            </div>
-          </div>
-          -->
         </fd_table>
       </div>
     </fd_main>
@@ -99,13 +40,14 @@
 <script>
   import fd_table from '../../../components/table/table'
   import fd_main from '../../../components/main/pc_main'
+  import echarts from 'echarts'
 
   let userArr = [
-    {id:1,name:'lxl',age:29,add:"gz",phone:"15811111111",city:'10001',date:1494408264222},
-    {id:2,name:'aaa',age:30,add:"zz",phone:"15822222222",city:'10002',date:1494408264222},
-    {id:3,name:'bbb',age:31,add:"dd",phone:"15833333333",city:'10003',date:1494408264222},
-    {id:4,name:'ccc',age:32,add:"dd",phone:"15844444444",city:'10001',date:1494408264222},
-    {id:5,name:'ddd',age:33,add:"ss",phone:"15855555555",city:'10002',date:''},
+    {id:1,name:'lxl',age:29,add:"gz",phone:"15811111111",city:'10001',date:1494408264222,progress:100},
+    {id:2,name:'aaa',age:30,add:"zz",phone:"15822222222",city:'10002',date:1494408264222,progress:90},
+    {id:3,name:'bbb',age:31,add:"dd",phone:"15833333333",city:'10003',date:1494408264222,progress:50},
+    {id:4,name:'ccc',age:32,add:"dd",phone:"15844444444",city:'10001',date:1494408264222,progress:30},
+    {id:5,name:'ddd',age:33,add:"ss",phone:"15855555555",city:'10002',date:'',progress:0}
   ];
   let titleArr = {
     id:{show:true,type:'sys',val:"序号",width:100,align:"center",sortable:true},
@@ -125,16 +67,9 @@
       '10001':'广州',
       '10002':'上海',
       '10003':'北京'
-    },formatter : function(row,column){
-      let status;
-      if (typeof(row) == 'number' || typeof(row) == 'string') {
-        status = row;
-      } else {
-        status = row.city;
-      }
-      return titleArr.city.list[status];
     }},
-    date : {show:true,type:'datetime',val:'日期',sortable:true,align:"center",/*time:true,*/edit:false,remind:'请选择时间'}
+    date : {show:true,type:'datetime',val:'日期',sortable:true,align:"center",/*time:true,*/noedit:false,remind:'请选择时间'},
+    progress : {show:true,type:'progress',val:'进度条',sortable:true}
   };
   let select_options = [
     {type:'input',title:'活动名称',key:'name'},
@@ -166,7 +101,7 @@
       ]},
       {value:'0002',label:'河北'}
     ]}
-  ]
+  ];
   let rules = {
     name : [
       {required:true, message:'请输入名称'},
@@ -186,7 +121,150 @@
     order : 'descending'
     */
   };
-
+  let option = {
+    backgroundColor : '#fff',
+    title : {
+      text : '广告详情',
+      textAlign : 'center',
+      textBaseline : 'top',
+      padding : 5,
+      borderWidth : 1,
+      borderColor : '#ccc',
+      left : 'center'
+    },
+    visualMap : {
+      show : false,
+      min : 80,
+      max : 600,
+      inRange : {
+        colorLightness : [1,0]
+      }
+    },
+    tooltip : {
+      trigger : 'item',
+      formatter : '{a} <br />{b}: {c} ({d}%)'
+    },
+    series : [
+      {
+        name : '访问来源',
+        type : 'pie',
+        radius : '55%',
+        data : [
+          {value:235,name:'视频广告'},
+          {value:330,name:'联盟广告'},
+          {value:310,name:'邮件营销'},
+          {value:335,name:'直接访问'},
+          {value:400,name:'搜索引擎'}
+        ],
+        roseType : 'angle',
+        label : {
+          normal : {
+            textStyle : {
+              color : 'rgba(0,0,0,0.3)'
+            }
+          }
+        },
+        labelLine : {
+          normal : {
+            lineStyle : {
+              color : 'rgba(0,0,0,0.3)'
+            }
+          }
+        },
+        itemStyle : {
+          normal : {
+            color : '#0066ff',
+            shadowBlur : 100,
+            shadowColor : 'rgba(0,0,0,0.5)'
+          }
+        }
+      }
+    ]
+  };
+  let option2 = {
+    title : {
+      text : '测试',
+      textAlign : 'center',
+      textBaseline : 'top',
+      padding : 5,
+      borderWidth : 1,
+      borderColor : '#ccc',
+      left : '70%'
+    },
+    tooltip : {
+      trigger : 'item'
+    },
+    grid : {
+      right : '2%',
+      left : '25%',
+      bottom : '15%',
+      top : '10%'
+    },
+    legend : {
+      data : [{
+        name : '销量',
+        icon : 'image://../static/img/timg.jpg',
+        textStyle : {
+          fontWeight : 'bold',
+          color : 'red'
+        }
+      },'销量一','价格','价格一'],
+      orient : 'vertical',
+  //    backgroundColor : '#eee',
+  //    borderColor : 'rgba(178,34,34,0.8)',
+  //    borderWidth : 4,
+  //    padding : 5,
+      itemGap : 10,
+      left : '1%',
+      top : 'center',
+      textStyle : {color : 'red'},
+      selected : {
+        '销量一' : false,
+        '价格一' : false
+      }
+    },
+    xAxis : {
+      data : ['衬衫','羊毛衫','雪纺衫','裤子','高跟鞋','袜子']
+    },
+    yAxis : [
+      {
+        type : 'value',
+        axisLavel : {
+          formatter : '{value} 件'
+        }
+      },
+      {
+        type : 'value',
+        axisLabel : {
+          formatter : '￥{value}'
+        },
+        splitLine : {show : false}
+      }
+    ],
+    series : [
+      {
+        name : '销量',
+        type : 'bar',
+        data : [5,20,36,10,10,20]
+      },
+      {
+        name : '销量一',
+        type : 'bar',
+        data : [5,20,36,10,10,20]
+      },
+      {
+        name : '价格',
+        type : 'line',
+        yAxisIndex : 0,
+        data : [50,10,36,25,30,20]
+      },
+      {
+        name : '价格一',
+        type : 'line',
+        data : []
+      }
+    ]
+  };
 
   export default {
     name : 'test1_0',
@@ -201,7 +279,9 @@
         current_page : 1,
         page_total : 10,
         sort_rule : sort_rule,
-        select_options : select_options
+        select_options : select_options,
+        histogram_option : option,
+        piechart_option : option2
       }
     },
     methods : {
@@ -291,13 +371,23 @@
     },
     events : {
     },
-    mounted (el){
+    mounted (){
+      console.log('mounted')
+      var myChart = echarts.init($(this.$el).find('.histogram')[0]);
+      myChart.setOption(this.histogram_option);
+
+      var myChart2 = echarts.init($(this.$el).find('.piechart')[0]);
+      myChart2.setOption(this.piechart_option);
+
     },
     created () {
       setTimeout(function(){
         this.$set(this._data,'data_list',userArr);
         this.loading = false;
       }.bind(this),2000)
+    },
+    beforeMount (){
+
     },
     components : {
       fd_table,fd_main
@@ -310,9 +400,9 @@
 <style scoped>
 
 </style>
-
+-->
 
 <style lang="stylus" rel="stylesheet/stylus">
-  @import "login.styl";
+  @import "test1_0.styl";
 </style>
--->
+

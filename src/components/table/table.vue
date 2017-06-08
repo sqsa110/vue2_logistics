@@ -19,16 +19,16 @@
                 {
                   key : {               //key键值(必须)
                     show : true,        //是否显示              默认为false
-                    type : 'string',    //数据展现类型(必须)    默认-             值类型 [   sys(系统值不显示)   string(文本)   textarea(可编辑文档区域)   select(下拉菜单)    datetime(日期-时间)  date(日期)  time(时间)]
+                    type : 'string',    //数据展现类型(必须)    默认-             值类型 [   sys(系统值不显示)   string(文本,string)   textarea(可编辑文档区域,string)   select(下拉菜单,string)    datetime(日期-时间,时间戳)  date(日期,时间戳)  time(时间,时间戳)  progress(进度条,number)]
                     val : 'string',     //表头名称              默认''
                     width : 100,        //表格宽度              默认'auto'
                     align : 'center',    //对齐类型              默认'left'      	值类型 left/center/right
                     sortable : true     //排序                  默认false         值类型 	true, false
                     sortFn : Function(a,b)  //自定义排序方法     默认无           需配合sortable : true使用
                     list : {name:val}   //元素列表              默认无            需配合type : 'select'使用
-                    formatter : Function(row, column) //格式化表单内容 默认无     需配合type : 'string'使用
+                 //   formatter : Function(row, column) //格式化表单内容 默认无     需配合type : 'string'使用
                     remind : 'string'   //备注                  默认无            需配合type : 'select|datetime|date|time'使用
-                    edit : true         //是否可以编辑          默认true
+                    noedit : true         //是否可以编辑          默认false
                   }
                 }
 
@@ -93,7 +93,6 @@
         handle_current_change 页码点击事件                       参数1 当前页码
         handle_delete_select  删除选中数据按钮                   参数1 当前选中的数据  参数2 回调函数 接收Boolear值 是否成功
         select_submit         搜索按钮触发该事件                 参数1 当前搜索条件表单数据
-
 -->
 
 <template>
@@ -207,9 +206,11 @@
               type="expand">
               <template scope="props">
                 <el-form label-position="left" inline class="demo-table-expand">
-                  <el-form-item v-for="(val,key) in title_list"  :label="val.val" :formatter="val.formatter">
-                    <span v-if="val.type == 'date' || val.type == 'time' || val.type == 'datetime'">{{format_date(props.row[key],val.type)}}</span>
-                    <span v-else>{{ val.formatter ? val.formatter(props.row[key]) : props.row[key] }}</span>
+                  <el-form-item v-for="(val,key) in title_list"  :label="val.val">
+                    <span v-if="val.type == 'date' || val.type == 'time' || val.type == 'datetime'">{{formatter_date(props.row[key],val.type)}}</span>
+                    <span v-else-if="val.type == 'progress'">{{props.row[key]}}%</span>
+                    <span v-else-if="val.type == 'select'">{{formatter_select(props.row[key],key)}}</span>
+                    <span v-else>{{ props.row[key] }}</span>
                   </el-form-item>
                 </el-form>
               </template>
@@ -223,8 +224,37 @@
               :align="val.align"
               :sortable="val.sortable"
               :sort-method="val.sortFn"
-              :formatter="formatter_date"
               :prop="key">
+              <template scope="scope">
+                <span>{{formatter_date(scope.row[key],val.type)}}</span>
+              </template>
+            </el-table-column>
+
+            <el-table-column
+              v-else-if="val.show && val.type == 'select'"
+              :label="val.val"
+              :width="val.width"
+              :align="val.align"
+              :sortable="val.sortable"
+              :sort-method="val.sortFn"
+              :prop="key">
+              <template scope="scope">
+                <span>{{formatter_select(scope.row[key],key)}}</span>
+              </template>
+            </el-table-column>
+
+            <el-table-column
+              v-else-if="val.show && val.type == 'progress'"
+              :label="val.val"
+              :width="val.width"
+              :align="val.align"
+              :sortable="val.sortable"
+              :sort-method="val.sortFn"
+              :prop="key">
+              <template scope="scope">
+                <el-progress v-if="scope.row[key] < 100" :text-inside="true" :stroke-width="18"  :percentage="scope.row[key]" ></el-progress>
+                <el-progress v-else :text-inside="true" :stroke-width="18" :percentage="scope.row[key]" status="success"></el-progress>
+              </template>
             </el-table-column>
 
             <el-table-column
@@ -288,7 +318,7 @@
         <el-form ref="edit_form" :rules="rules" :model="edit_form" label-width="80px">
 
           <el-row>
-            <template v-for="(val,key) in title_list" v-if="((val.type == 'datetime' || val.type == 'date' || val.type == 'time' || val.type != 'sys') && !val.edit)">
+            <template v-for="(val,key) in title_list" v-if="(val.type != 'sys' && val.type != 'progress' && !val.noedit)">
               <el-col class="alert_col" v-if="val.size == 'big'" :span="24">
                 <el-form-item :label="val.val" :prop="key">
                   <el-input v-if="val.type == 'string'"  :disabled="val.disabled" v-model="edit_form[key]"></el-input>
@@ -564,9 +594,6 @@
         this.$set(this._data,'show_alert_off',false);
         this.$emit('alert_cancel');
       },
-      format_date(val,type){
-        return $.get_date_time(val,type);
-      },
       handleSizeChange(val) {
         this.$emit('handle_size_change',val);
         console.log('每页' + val + '条')
@@ -622,8 +649,23 @@
       date_change(str){
         this.select_form[str] = this.select_form[str].getTime();
       },
-      formatter_date(row,col){
-        return $.get_date_time(row[col.property],this.table_options[col.property].type);
+      formatter_date(val,type){
+        return $.get_date_time(val,type);
+      },
+      formatter_select(val,key){
+        var text = ''
+        $.each(this.table_options,function(i,m){
+          if (key == i) {
+            $.each(m.list,function(j,n){
+              if (j == val) {
+                text = n;
+                return false;
+              }
+            });
+            return false;
+          }
+        });
+        return text;
       },
       dateChangeFormat(key){
         if (this.edit_form[key] instanceof Date){
