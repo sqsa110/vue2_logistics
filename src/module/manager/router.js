@@ -8,7 +8,7 @@ let routers = new vueRouter({
     path : '/',
     redirect : '/test1'
   },{
-    path : '/test1/index',
+    path : '/test1',
     component : (reslove) => require(['./router/test1'],reslove),
     children : [
       {path : '',component : (reslove) => require(['./router/test1_0'],reslove)},
